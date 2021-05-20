@@ -3,7 +3,7 @@ const employee = require('../lib/employee.js');
 describe('Employee class',()=>{
 
     it("Prompts for employee name, id number and email if parameters aren't provided.",()=>{
-        expect(()=>{ new employee() }).toThrow('Please provide employee name, id and email.');
+        expect(()=>{ new employee() }).toThrow('Please provide relevant employee details.');
     });
 
     it("Returns the name when the getName function is invoked",()=>{
