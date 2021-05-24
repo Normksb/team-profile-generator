@@ -38,52 +38,135 @@ inquirer
   ])
 
   .then((answers) => {
-    console.log(answers);
     let teamManager = new manager(
       answers.managerName,
       answers.managerID,
       answers.managerEmail,
       answers.managerPhone
     );
-    let managerHtml = addManagerToTeam(teamManager);
+    let managerHtml = addTeamMemberToTeam(teamManager);
     currentTeam = currentTeam + managerHtml;
-    if(answers.checkListOption == "Engineer"){
-        engineerQuestions();
-
-    } else if(answers.checkListOption == "Intern"){
-        internQuestions();
+    if (answers.checkListOption == "Engineer") {
+      engineerQuestions();
+    } else if (answers.checkListOption == "Intern") {
+      internQuestions();
     } else {
-        writeToFile();
+      writeToFile();
     }
-    // switch(answers.checkListOption){
-    //     case "Engineer":
-    //         engineerQuestions();
-    //         break;
-    //     case "Intern":
-    //         internQuestions();
-    //         break;
-    //     case "Finish":
-    //         writeToFile();
-    //         break;
-    //     default:
-    //         writeToFile();
-    //}
+
   });
 
-function engineerQuestions(){
-    console.log('engineer');
+function engineerQuestions() {
+    inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Please enter engineers name",
+        name: "name",
+      },
+      {
+        type: "input",
+        message: "Please enter engineers employee ID",
+        name: "id",
+      },
+      {
+        type: "input",
+        message: "Please enter engineers email address.",
+        name: "email",
+      },
+      {
+        type: "input",
+        message: "Please provide engineers github link.",
+        name: "github",
+      },
+      {
+        type: "checkbox",
+        message:
+          "Select engineer to add an engineer, intern to add an intern or finish to finish building your team",
+        name: "checkListOption",
+        choices: ["Engineer", "Intern", "Finish"],
+      },
+    ])
+  
+    .then((answers) => {
+      let teamMember = new engineer(
+        answers.name,
+        answers.id,
+        answers.email,
+        answers.github
+      );
+      let teamMemberHtml = addTeamMemberToTeam(teamMember);
+      currentTeam = currentTeam + teamMemberHtml;
+      if (answers.checkListOption == "Engineer") {
+        engineerQuestions();
+      } else if (answers.checkListOption == "Intern") {
+        internQuestions();
+      } else {
+        writeToFile();
+      }
+  
+    });
 }
 
-function internQuestions(){
-    console.log('intern');
+
+function internQuestions() {
+    inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Please enter interns name",
+        name: "name",
+      },
+      {
+        type: "input",
+        message: "Please enter interns employee ID",
+        name: "id",
+      },
+      {
+        type: "input",
+        message: "Please enter interns email address.",
+        name: "email",
+      },
+      {
+        type: "input",
+        message: "Please provide interns school name.",
+        name: "school",
+      },
+      {
+        type: "checkbox",
+        message:
+          "Select engineer to add an engineer, intern to add an intern or finish to finish building your team",
+        name: "checkListOption",
+        choices: ["Engineer", "Intern", "Finish"],
+      },
+    ])
+  
+    .then((answers) => {
+      let teamMember = new intern(
+        answers.name,
+        answers.id,
+        answers.email,
+        answers.school
+      );
+      let teamMemberHtml = addTeamMemberToTeam(teamMember);
+      currentTeam = currentTeam + teamMemberHtml;
+      if (answers.checkListOption == "Engineer") {
+        engineerQuestions();
+      } else if (answers.checkListOption == "Intern") {
+        internQuestions();
+      } else {
+        writeToFile();
+      }
+  
+    });
 }
 
-function writeToFile(){
-    console.log('current team is... ' + currentTeam);
+function writeToFile() {
+  console.log("current team is... " + currentTeam);
 }
 
-function addManagerToTeam(data){
-    return `
+function addTeamMemberToTeam(data) {
+  return `
     
     <div>
     <p>Name: ${data.name}</p>
@@ -92,9 +175,8 @@ function addManagerToTeam(data){
     <p>Office Number: ${data.officeNumber}</p>
     </div>
 
-    `
+    `;
 }
-
 
 function html(currentTeam) {
   return `<!DOCTYPE html>
