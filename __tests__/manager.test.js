@@ -2,7 +2,7 @@ const manager = require('../lib/manager.js');
 
 describe('Manager class',()=>{
 
-    it("Prompts for employee name, id number and email if parameters aren't provided.",()=>{
+    it("Prompts for employee details if parameters aren't provided.",()=>{
         expect(()=>{ new manager() }).toThrow('Please provide relevant employee details.');
     });
     it("Returns the office number when the getNumber function is invoked",()=>{
