@@ -44,8 +44,9 @@ inquirer
       answers.managerEmail,
       answers.managerPhone
     );
-    let managerHtml = addTeamMemberToTeam(teamManager);
-    currentTeam = currentTeam + managerHtml;
+//    let managerHtml = addTeamMemberToTeam(teamManager);
+    let teamMemberHtml = addTeamMemberToTeam('manager', teamManager);
+    currentTeam = currentTeam + teamMemberHtml;
     if (answers.checkListOption == "Engineer") {
       engineerQuestions();
     } else if (answers.checkListOption == "Intern") {
@@ -76,7 +77,7 @@ function engineerQuestions() {
       },
       {
         type: "input",
-        message: "Please provide engineers github link.",
+        message: "Please provide engineers github address. Complete address including http is required please",
         name: "github",
       },
       {
@@ -95,7 +96,8 @@ function engineerQuestions() {
         answers.email,
         answers.github
       );
-      let teamMemberHtml = addTeamMemberToTeam(teamMember);
+//      let teamMemberHtml = addTeamMemberToTeam(teamMember);
+      let teamMemberHtml = addTeamMemberToTeam('engineer', teamMember);
       currentTeam = currentTeam + teamMemberHtml;
       if (answers.checkListOption == "Engineer") {
         engineerQuestions();
@@ -148,7 +150,8 @@ function internQuestions() {
         answers.email,
         answers.school
       );
-      let teamMemberHtml = addTeamMemberToTeam(teamMember);
+//      let teamMemberHtml = addTeamMemberToTeam(teamMember);
+      let teamMemberHtml = addTeamMemberToTeam('intern', teamMember);
       currentTeam = currentTeam + teamMemberHtml;
       if (answers.checkListOption == "Engineer") {
         engineerQuestions();
@@ -163,19 +166,47 @@ function internQuestions() {
 
 function writeToFile() {
   console.log("current team is... " + currentTeam);
+  fs.writeFile('./dist/team.html', html(currentTeam), (err) =>
+  err ? console.log(err) : console.log("Success!")
+);
 }
 
-function addTeamMemberToTeam(data) {
-  return `
-    
+function addTeamMemberToTeam(memberType, data) {
+  if(memberType == 'manager'){
+
+    return `
+      
+      <div>
+      <p>Name: ${data.name}</p>
+      <p>ID: ${data.id}</p>
+      <p><a href="mailto:${data.email}">Email: ${data.email}</a></p>
+      <p>Office Number: ${data.officeNumber}</p>
+      </div>
+  
+      `;
+  }else if(memberType == 'engineer'){
+    return `
+      
     <div>
     <p>Name: ${data.name}</p>
     <p>ID: ${data.id}</p>
-    <p>Email: ${data.email}</p>
-    <p>Office Number: ${data.officeNumber}</p>
+    <p><a href="mailto:${data.email}">Email: ${data.email}</a></p>
+    <p><a href="${data.github}" target="_blank">github</a></p>
     </div>
 
     `;
+  }else {
+    return `
+      
+    <div>
+    <p>Name: ${data.name}</p>
+    <p>ID: ${data.id}</p>
+    <p><a href="mailto:${data.email}">Email: ${data.email}</a></p>
+    <p>School: ${data.school}</p>
+    </div>
+
+    `;
+  }
 }
 
 function html(currentTeam) {
